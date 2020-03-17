@@ -6,15 +6,12 @@ header{
     display: flex;
     justify-content: flex-end;
     border: 1px solid gray;
+    margin-bottom: 20px;
 }
 .products{
     display: grid;
     grid-template-columns: repeat(4, auto);
     justify-content: space-around;
-}
-h3{
-    padding: 20px 0;
-    text-align: center;
 }
 p{
     padding: 20px 0;
