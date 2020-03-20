@@ -1,25 +1,69 @@
 'use strict';
 
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+
+// Переделать:
+// let getRequest = (url, cb) => {
+//   let xhr = new XMLHttpRequest();
+//   xhr.open('GET', url, true);
+//   xhr.onreadystatechange = () => {
+//     if (xhr.readyState === 4) {
+//       if (xhr.status !== 200) {
+//         console.log('Error');
+//       } else {
+//         cb(xhr.responseText);
+//       }
+//     }
+//   };
+//   xhr.send();
+// };
+
+// let getRequest = (url, cb) => {
+//   return new Promise((resolve, reject) => {
+//     let xhr = new XMLHttpRequest();
+//     xhr.open('GET', url, true);
+//     xhr.onload = () => {
+//       if (this.status == 200) {
+//         resolve(this.response);
+//       } else {
+//         reject(error);
+//       }
+//     };
+//   xhr.onerror = () => {reject(new Error("Network Error"))};
+//   xhr.send();
+//   });
+// }
+
+// let getRequest = fetch('url')
+//   .then(result => result.json())
+//   .then(data => {
+//     console.log(data)
+//   })
+//   .catch(error => {
+//     console.log(error)
+// });
+
 class ProductList {
     constructor(container = '.products'){
         this.container = container;
         this.goods = [];
         this.allProducts = [];
-        this._FetchProducts();
-        this._render();
-        this._sumPrice();
-
+        this._getProducts()
+            .then((data) => {
+                this.goods = [...data];
+                this.render();
+            });
     }
 
-    _FetchProducts(){
-        this.goods = [
-            {id: 1, title: 'Notebook', price: 20000},
-            {id: 2, title: 'Mouse', price: 1500},
-            {id: 3, title: 'Keyboard', price: 5000},
-            {id: 4, title: 'Gamepad', price: 4500},
-        ]
+    _getProducts() {
+        return fetch(`${API}/catalogData.json`)
+            .then(result => result.json())
+            .catch(error => {
+              console.log('Error!', error);
+            });
     }
-    _render(){
+   
+    render(){
         const block = document.querySelector(this.container);
         for (let product of this.goods){
             const productObj = new ProductItem(product);
@@ -28,19 +72,17 @@ class ProductList {
         }
     }
 
-    // Общая сумма всех продуктов.
     _sumPrice(){
-        let sum = 0;
-        this.goods.forEach(prod => console.log(sum += prod.price))
+        return this.allProducts.reduce((accum, item) => accum += item.price, 0);
     }
 
 };
 
 class ProductItem {
     constructor (product, img = 'https://via.placeholder.com/120'){
-        this.title = product.title;
+        this.title = product.product_name;
         this.price = product.price;
-        this.id = product.id;
+        this.id = product.id_product;
         this.img = img;
     }
 
@@ -49,88 +91,14 @@ class ProductItem {
             <img src=${this.img} alt="img">
             <h3>${this.title}</h3>
             <p>${this.price} ₽</p>
-            <button class = 'btn'>Добавить в корзину</button>
+            <button class = "btn">Добавить в корзину</button>
             </div>`;
     }
 };
 
 new ProductList();
 
-// Пустой класс, создающий продукт для корзины.
-class CartProduct{
 
-};
-
-// Пустой класс, добавляющий или убирающий CartProduct из корзины.
 class CartList{
 
 };
-
-/*class Hamburger {
-    Hamburger = {
-	
-        price: 0,
-        calories: 0,
-    
-        small: {
-            price: 50,
-            calories: 20
-        },
-    
-        big: {
-            price: 100,
-            calories: 40
-        },
-    
-        cheese: {
-            price: 10,
-            calories: 20
-        },
-    
-        salad: {
-            price: 20,
-            calories: 5
-        },
-    
-        potato: {
-            price: 15,
-            calories: 10
-        },
-    
-        spice: {
-            price: 15,
-            calories: 0
-        },
-    
-        sauce: {
-            price: 20,
-            calories: 5
-        },
-    
-    
-        calc: function (size){
-            this.price += Hamburger[size].price;
-            this.calories += Hamburger[size].calories;
-            
-            let boxes = document.querySelectorAll('input[name=filling]:checked');
-            for (let i = 0; i < boxes.length; i++){
-                    let add = boxes[i].id;
-                    this.price += Hamburger[add].price;
-                    this.calories += Hamburger[add].calories;
-            }
-            
-            Hamburger.createTotal(this.price, this.calories);
-        },	   
-        
-        createTotal: function (price, calories){
-            document.getElementById('btn').insertAdjacentHTML("afterend", `
-            <div>
-            <h3>Общая стоиость:${this.price}</h3>
-            <h3>Калорийность:${this.calories}</h3>
-            </div>`)
-        }
-    }
-}
-document.getElementById('btn').addEventListener('click', function(){
-    Hamburger.calc(document.querySelector('input[name="size"]:checked').value);
-})*/
