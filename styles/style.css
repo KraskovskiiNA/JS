@@ -25,8 +25,9 @@ header {
     background-color: white;
     padding: 20px;
     border: 1px solid #ccc;
+    right: 0;
 }
-.cart_product{
+.cart-item{
     display: flex;
 }
 .cart_product_block{

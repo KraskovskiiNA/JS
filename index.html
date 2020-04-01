@@ -12,40 +12,21 @@
         <header>
             <h2>Интернет-магазин</h2>
             <div class="cart">
-                <form action="#" @submit.prevent="filter">
-                    <input type="text" v-model="search">
-                    <i class="fas fa-search" style="cursor: pointer; padding: 0 10px;"></i></button>
-                </form>
-                <button class="btn_cart" type="button" @click="showCart = !showCart">Корзина</button>
-                <div class="cart-block" v-show="showCart">
-                    <p v-if="!cartProducts.length">Корзина пуста</p>
-                    <div class="cart_product" v-for="item of cartProducts" :key="item.id_product">
-                        <div class="cart_product_block">
-                            <img :src="imgCart" alt="img">
-                            <div class="product_desc">
-                                <h3>{{ item.product_name }}</h3>
-                                <p>Количество: {{ item.quantity }}</p>
-                                <p>{{ item.price }} ₽/шт</p>
-                            </div>
-                        </div>
-                        <div class="right_block">
-                            <i class="far fa-times-circle" @click="del(item)" style="cursor: pointer;"></i>
-                            <p>{{ item.quantity*item.price }}₽</p>
-                        </div>
-                    </div>
-                </div>
+                <us-saerch></us-saerch>
+                <cart ref="cart"></cart>
             </div>
         </header>
-        <main class="products">
-            <div v-for="product of filtered" :key="product.id_product">
-                <img :src="imgCatalog" alt="img">
-                <h3>{{ product.product_name }}</h3>
-                <p class="price_pad">{{ product.price }}₽</p>
-                <button class="buy_btn" @click="addProduct(product)">Купить</button>
-            </div>
+        <main>
+            <products ref="products"></products>
+            <error ref="error"></error>
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/cartComp.js"></script>
+    <script src="js/productComp.js"></script>
+    <script src="js/searchComp.js"></script>
+    <script src="js/errorComp.js"></script>
     <script src="js/app.js"></script>
+    
 </body>
 </html>
